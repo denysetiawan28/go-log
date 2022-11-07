@@ -1,0 +1,16 @@
+apps:
+  name: 'github.com/denysetiawan28/go-log'
+  version: '1.0.0'
+server:
+  port: 9090
+database:
+  url: 'github.com/denysetiawan28/go-log'
+  port: '5432'
+  databaseName: 'github.com/denysetiawan28/go-log'
+  username: 'github.com/denysetiawan28/go-log'
+  password: 'github.com/denysetiawan28/go-log'
+  schema: 'github.com/denysetiawan28/go-log'
+  connectionTimeout: '20s'
+  maxIdleConnection: 5
+  maxOpenConnection: 10
+  debugMode: true
