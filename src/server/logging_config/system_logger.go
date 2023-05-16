@@ -1,16 +1,15 @@
-package properties
+package logging_config
 
 import (
-	"github.com/denysetiawan28/go-log/src/server/logging_config"
+	"github.com/denysetiawan28/go-log/src/server/config"
 	"time"
 )
 
-type App struct {
-	Logger  logging_config.SystemLogger
-	Session Session
+type SystemLogger struct {
+	ILogEngine
 }
 
-type Session struct {
+type Context struct {
 	RequestTime     time.Time
 	ThreadID        string `json:"_app_thread_id"`
 	JourneyID       string `json:"_app_journey_id"`
@@ -25,17 +24,11 @@ type Session struct {
 	AdditionalData  map[string]interface{} `json:"_app_data,omitempty"`
 	ErrorMessage    string
 	ResponseCode    string
+	Tag             string `json:"_app_tag"`
 }
 
-// NewSessionRequest
-// Create session request to echo context and set to struct
-func NewSessionRequest(logger logging_config.SystemLogger) *App {
-	return &App{
-		Logger: logger,
-		Session: Session{
-			RequestTime: time.Now(),
-			Header:      map[string]interface{}{},
-			Request:     struct{}{},
-		},
-	}
+func SetupLogger(conf config.Logs) SystemLogger {
+	sysLog, _ := NewLogEngine(conf)
+
+	return SystemLogger{sysLog}
 }

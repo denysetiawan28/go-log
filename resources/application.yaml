@@ -1,8 +1,16 @@
 apps:
   name: 'github.com/denysetiawan28/go-log'
   version: '1.0.0'
+  tag: 'go-log'
 server:
   port: 9090
+logs:
+  stdout: true
+  file: true
+  maximumLogSize: 10
+  maximumLogBackup: 3
+  maximumLogAge: 10
+  path: 'C:\logs\app.log'
 database:
   url: 'github.com/denysetiawan28/go-log'
   port: '5432'

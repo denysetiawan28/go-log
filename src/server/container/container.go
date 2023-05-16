@@ -2,20 +2,21 @@ package container
 
 import (
 	"github.com/denysetiawan28/go-log/src/server/config"
-	Logs "github.com/denysetiawan28/go-log/src/server/config"
-	"go.uber.org/zap"
+	"github.com/denysetiawan28/go-log/src/server/logging_config"
 )
 
 type DefaultContainer struct {
 	//#register config
 	Config *config.DefaultConfig
-	Logger *zap.Logger
+	Logger logging_config.SystemLogger
 }
 
 func IntializeContainer() *DefaultContainer {
 
 	config := config.ConfigApps("./resources/")
 
+	//initialize Logger
+	logger := logging_config.SetupLogger(config.Logs)
 	//initialize database
 	//db := database.InitializeDatabase(config.Database)
 
@@ -24,6 +25,6 @@ func IntializeContainer() *DefaultContainer {
 
 	return &DefaultContainer{
 		Config: config,
-		Logger: Logs.SetupLogger(),
+		Logger: logger,
 	}
 }
