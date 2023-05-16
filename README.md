@@ -8,8 +8,13 @@ Feature :
 - Standarization log format
 - Available for INFO, DEBUG, FATAL, ERROR, PANIC
 
-## Log Output Examples
+Library :
+- Echo Framework
+- Viper
+- Uber Zap
+- Lumberjack.v2 (gopkg.in/natefinch/lumberjack.v2)
 
+## Log Output Examples
 ```json
 {
   "timestamp": "2023-05-16 15:30:26.961",
