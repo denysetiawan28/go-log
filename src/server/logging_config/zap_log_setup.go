@@ -57,8 +57,8 @@ func NewZapLogger(conf config.Logs, level LogLevel, writers ...io.Writer) (logge
 
 func getEncoder() zapcore.Encoder {
 	encoderConfig := zapcore.EncoderConfig{
-		TimeKey:        "xtime",
-		MessageKey:     "x",
+		TimeKey:        "timestamp",
+		MessageKey:     zapcore.OmitKey,
 		EncodeDuration: millisDurationEncoder,
 		EncodeTime:     timeEncoder,
 		LineEnding:     zapcore.DefaultLineEnding,
