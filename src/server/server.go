@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"github.com/denysetiawan28/go-log/src/handler"
 	"github.com/denysetiawan28/go-log/src/server/container"
-	"github.com/denysetiawan28/go-log/src/server/middleware"
+	"github.com/denysetiawan28/go-log/src/server/custom_middleware"
 	"github.com/denysetiawan28/go-log/src/server/router"
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"golang.org/x/net/context"
 	"net/http"
 	"os"
@@ -30,13 +29,28 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 func StartHttpServer(container *container.DefaultContainer) {
 	e := echo.New()
-	e.Logger.SetLevel(log.INFO)
+	//e.Logger.SetLevel(log.INFO)
 	validate := validator.New()
 	validate.RegisterValidation("ISO8601date", IsISO8601Date)
 
+	//logger, _ := zap.NewProduction()
+	//e.Use(custom_middleware.ZapLogger(logger))
+	//e.Use(custom_middleware.CustomZapLogger(logger))
+	//e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+	//	LogURI:    true,
+	//	LogStatus: true,
+	//	LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+	//		logger.Info("request",
+	//			zap.String("URI", v.URI),
+	//			zap.Int("status", v.Status),
+	//			zap.Int("Response_size", int(v.ResponseSize)),
+	//		)
+	//		return nil
+	//	},
+	//}))
 	e.Validator = &CustomValidator{validator: validate}
 
-	middleware.SetupMiddleware(e)
+	custom_middleware.SetupMiddleware(e, container)
 	router.InitializeRouter(e, handler.InitializeHandler(container))
 
 	port := fmt.Sprintf("%s%s", ":", container.Config.Server.Port)
