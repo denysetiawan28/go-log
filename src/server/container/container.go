@@ -2,13 +2,13 @@ package container
 
 import (
 	"github.com/denysetiawan28/go-log/src/server/config"
-	"github.com/denysetiawan28/go-log/src/server/logging_config"
+	log_watcher "github.com/denysetiawan28/log-watcher"
 )
 
 type DefaultContainer struct {
 	//#register config
 	Config *config.DefaultConfig
-	Logger logging_config.SystemLogger
+	Logger log_watcher.SystemLogger
 }
 
 func IntializeContainer() *DefaultContainer {
@@ -16,7 +16,14 @@ func IntializeContainer() *DefaultContainer {
 	config := config.ConfigApps("./resources/")
 
 	//initialize Logger
-	logger := logging_config.SetupLogger(config.Logs)
+	logger := log_watcher.SetupLogger(log_watcher.LogConfig{
+		Stdout:           config.Logs.Stdout,
+		File:             config.Logs.File,
+		Path:             config.Logs.Path,
+		MaximumLogSize:   config.Logs.MaximumLogSize,
+		MaximumLogAge:    config.Logs.MaximumLogAge,
+		MaximumLogBackup: config.Logs.MaximumLogBackup,
+	})
 	//initialize database
 	//db := database.InitializeDatabase(config.Database)
 

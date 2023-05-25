@@ -18,7 +18,8 @@ func (h helloHandler) HelloWorld(ctx echo.Context) (err error) {
 	dat := ctx.Get(constant.AppLoggerID)
 	sess := dat.(*properties.App)
 	println(sess)
-	sess.Logger.Info(ctx, "Hello From Logger")
+	ctxi := ctx.Request().Context()
+	sess.Logger.Info(ctxi, "Hello From Logger")
 	//sess.Logger.Info(nil, "testing")
 	return ctx.JSON(http.StatusOK, "ok")
 }
