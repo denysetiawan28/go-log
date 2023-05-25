@@ -27,7 +27,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 	return nil
 }
 
-func StartHttpServer(container *container.DefaultContainer) {
+func StartHttpServer(container *container.DefaultContainer, appLogger *container.AppLogger) {
 	e := echo.New()
 	//e.Logger.SetLevel(log.INFO)
 	validate := validator.New()
@@ -35,7 +35,7 @@ func StartHttpServer(container *container.DefaultContainer) {
 
 	e.Validator = &CustomValidator{validator: validate}
 
-	custom_middleware.SetupMiddleware(e, container)
+	custom_middleware.SetupMiddleware(e, container, appLogger)
 	router.InitializeRouter(e, handler.InitializeHandler(container))
 
 	port := fmt.Sprintf("%s%s", ":", container.Config.Server.Port)

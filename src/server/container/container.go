@@ -3,15 +3,20 @@ package container
 import (
 	"github.com/denysetiawan28/go-log/src/server/config"
 	log_watcher "github.com/denysetiawan28/log-watcher"
+	"golang.org/x/net/context"
 )
 
 type DefaultContainer struct {
 	//#register config
 	Config *config.DefaultConfig
-	Logger log_watcher.SystemLogger
 }
 
-func IntializeContainer() *DefaultContainer {
+type AppLogger struct {
+	LogContext context.Context
+	Logger     log_watcher.SystemLogger
+}
+
+func IntializeContainer() (*DefaultContainer, *AppLogger) {
 
 	config := config.ConfigApps("./resources/")
 
@@ -29,9 +34,13 @@ func IntializeContainer() *DefaultContainer {
 
 	//row := db.Raw("SELECT 1").Row()
 	//fmt.Println(row)
-
-	return &DefaultContainer{
+	defContainer := &DefaultContainer{
 		Config: config,
+	}
+
+	appLogger := &AppLogger{
 		Logger: logger,
 	}
+
+	return defContainer, appLogger
 }

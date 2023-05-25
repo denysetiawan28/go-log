@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/denysetiawan28/go-log/src/constanta/constant"
-	"github.com/denysetiawan28/go-log/src/properties"
+	"github.com/denysetiawan28/go-log/src/server/container"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
@@ -15,11 +15,9 @@ func NewHelloHandler() *helloHandler {
 }
 
 func (h helloHandler) HelloWorld(ctx echo.Context) (err error) {
-	dat := ctx.Get(constant.AppLoggerID)
-	sess := dat.(*properties.App)
-	println(sess)
-	ctxi := ctx.Request().Context()
-	sess.Logger.Info(ctxi, "Hello From Logger")
+	sess := ctx.Get(constant.AppLoggerID).(*container.AppLogger)
+	//ctxi := ctx.Request().Context().
+	sess.Logger.Info(sess.LogContext, "Hello From Logger")
 	//sess.Logger.Info(nil, "testing")
 	return ctx.JSON(http.StatusOK, "ok")
 }
