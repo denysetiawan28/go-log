@@ -1,6 +1,7 @@
 package custom_middleware
 
 import (
+	"bytes"
 	"github.com/denysetiawan28/go-log/src/constanta/constant"
 	"github.com/denysetiawan28/go-log/src/server/container"
 	log_watcher "github.com/denysetiawan28/log-watcher"
@@ -42,9 +43,16 @@ func SetupMiddleware(e *echo.Echo, cont *container.DefaultContainer, appLogger *
 			//app := properties.NewSessionRequest(cont.Logger)
 
 			port, _ := strconv.Atoi(cont.Config.Server.Port)
-			body, err := ioutil.ReadAll(c.Request().Body)
-			if err != nil {
-				body = nil
+			payload := ""
+			var bodyBytes []byte
+			if c.Request() != nil {
+				if c.Request().Body != nil {
+					bodyBytes, _ = ioutil.ReadAll(c.Request().Body)
+					// write back to request body
+					c.Request().Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+					// parse json data
+					payload = string(bodyBytes)
+				}
 			}
 
 			dt := log_watcher.Context{
@@ -59,7 +67,7 @@ func SetupMiddleware(e *echo.Echo, cont *container.DefaultContainer, appLogger *
 				ReqMethod:      c.Request().Method,
 				SrcIP:          c.RealIP(),
 				Header:         c.Request().Header,
-				Request:        string(body),
+				Request:        payload,
 			}
 
 			//set log information to golang context
